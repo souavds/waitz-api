@@ -2,7 +2,10 @@ require('dotenv').config();
 require('./socket/index');
 
 const { http } = require('./app');
+const { initDB } = require('./config/database');
 
 const port = process.env.PORT;
 
-http.listen(port, () => console.log(`Listening on port ${port}`));
+initDB().then(() => {
+  http.listen(port, () => console.log(`Listening on port ${port}`));
+})
