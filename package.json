@@ -8,8 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon src/index.js",
-    "start": "node ./build/index.js",
-    "clean": "rm -rf build && mkdir build"
+    "start": "node src/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

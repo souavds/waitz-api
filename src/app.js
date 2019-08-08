@@ -9,4 +9,8 @@ app.use(cors(), helmet(), express.json());
 const http = require('http').createServer(app)
 const io = require('socket.io')(http);
 
+const routers = require('./routers');
+
+app.use('/checkin', routers)
+
 module.exports = { app, http, io };
