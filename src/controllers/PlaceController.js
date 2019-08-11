@@ -3,7 +3,7 @@ const Models = require('../models');
 
 const getNearbyPlaces = async (req, res) => {
   const gmapsRes = await gmaps.placesNearby({
-    location: [req.body.lat, req.body.lng],
+    location: [req.query.lat, req.query.lng],
     radius: 50000,
     type: 'hospital'
   }).asPromise()
