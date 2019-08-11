@@ -1,6 +1,6 @@
-const Place = require('./place');
-const CheckIn = require('./checkIn');
-const Comment = require('./comment');
+const Place = require('./Place');
+const CheckIn = require('./CheckIn');
+const Comment = require('./Comment');
 
 module.exports = {
   Place,

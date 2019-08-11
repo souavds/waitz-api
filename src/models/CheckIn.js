@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const checkInSchema = mongoose.Schema({
   user_id: String,
   place_id: String,
+  type: String,
   date: { type: Date, default: Date.now },
   active: { type: Boolean, default: true }
 });

@@ -1,5 +1,5 @@
-const CheckIn = require('./checkIn');
+const Place = require('./PlaceController');
 
 module.exports = {
-  CheckIn
+  Place
 }
