@@ -5,5 +5,5 @@ const Comment = require('./Comment');
 module.exports = {
   Place,
   CheckIn,
-  Comment
-}
+  Comment,
+};

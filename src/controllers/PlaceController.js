@@ -1,4 +1,4 @@
-const gmaps = require('../config/gmaps');
+// const gmaps = require('../config/gmaps');
 const Models = require('../models');
 
 const getNearbyPlaces = async (req, res) => {
@@ -20,7 +20,7 @@ const getNearbyPlaces = async (req, res) => {
   // });
 
   // const placesInDB = await Models.Place.find({ gmaps_id: { $in: gmaps_ids } });
-  
+
   // const placesNotInDB = [];
   // const toSentPlaces = [...placesInDB];
   // if (placesInDB.length === 0) {
@@ -45,8 +45,8 @@ const getNearbyPlaces = async (req, res) => {
   // return res.json(toSentPlaces);
   const places = await Models.Place.find();
   return res.json(places);
-}
+};
 
 module.exports = {
-  getNearbyPlaces
-}
+  getNearbyPlaces,
+};

@@ -8,7 +8,21 @@
   "private": true,
   "scripts": {
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "lint": "eslint 'src/**/*.js' --fix",
+    "format": "prettier-eslint 'server/**/*.{js,json}' --write"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --fix",
+      "prettier-eslint --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "dependencies": {
     "@google/maps": "^0.5.5",
@@ -23,6 +37,13 @@
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-promise": "^4.2.1",
+    "husky": "^3.0.3",
+    "lint-staged": "^9.2.1",
+    "nodemon": "^1.19.1",
+    "prettier-eslint-cli": "^5.0.0"
   }
 }

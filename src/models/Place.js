@@ -7,28 +7,28 @@ const placeSchema = mongoose.Schema({
   geometry: {
     location: {
       lat: Number,
-      lng: Number
+      lng: Number,
     },
     viewport: {
       northeast: {
         lat: Number,
-        lng: Number
+        lng: Number,
       },
       southwest: {
         lat: Number,
-        lng: Number
-      }
-    }
+        lng: Number,
+      },
+    },
   },
   rating: { type: Number, default: 0 },
   vicinity: String,
   queue: {
     geral: { type: Number, default: 0 },
     ortopedia: { type: Number, default: 0 },
-    outro: { type: Number, default: 0 }
+    outro: { type: Number, default: 0 },
   },
   created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now }
+  updated_at: { type: Date, default: Date.now },
 });
 
 const Place = mongoose.model('Place', placeSchema);

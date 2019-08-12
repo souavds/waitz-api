@@ -8,10 +8,10 @@ const commentSchema = mongoose.Schema({
     type: String,
     myNumber: Number,
     currentNumber: Number,
-    aheadNumber: Number
+    aheadNumber: Number,
   },
   date: { type: Date, default: Date.now },
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
 });
 
 const Comment = mongoose.model('Comment', commentSchema);
