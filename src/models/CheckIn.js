@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const checkInSchema = mongoose.Schema({
+const CheckInSchema = mongoose.Schema({
   user_id: String,
   place_id: String,
   type: String,
@@ -8,6 +8,6 @@ const checkInSchema = mongoose.Schema({
   active: { type: Boolean, default: true },
 });
 
-const CheckIn = mongoose.model('CheckIn', checkInSchema);
+const CheckIn = mongoose.model('CheckIn', CheckInSchema);
 
 module.exports = CheckIn;

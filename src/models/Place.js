@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const placeSchema = mongoose.Schema({
+const PlaceSchema = mongoose.Schema({
   gmaps_id: String,
   reference: String,
   name: String,
@@ -31,6 +31,6 @@ const placeSchema = mongoose.Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
-const Place = mongoose.model('Place', placeSchema);
+const Place = mongoose.model('Place', PlaceSchema);
 
 module.exports = Place;
