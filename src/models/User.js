@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const UserSchema = mongoose.Schema({
+  username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   created_at: { type: Date, default: Date.now },
@@ -28,6 +29,17 @@ UserSchema.pre('save', function (next) {
     next();
   }
 });
+
+// eslint-disable-next-line func-names
+UserSchema.methods.isCorrectPassword = function (password, callback) {
+  bcrypt.compare(password, this.password, (err, same) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(err, same);
+    }
+  });
+};
 
 const User = mongoose.model('User', UserSchema);
 
