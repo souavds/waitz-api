@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 const Models = require('../models');
 
-const expiresIn = '2m';
+const expiresIn = '24h';
 
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
