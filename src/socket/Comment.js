@@ -5,7 +5,7 @@ const Models = require('../models');
 
 const newComment = async (io, socket, data) => {
   const comment = new Models.Comment({
-    user_id: data.user_id,
+    user: data.user,
     place_id: data.place_id,
     text: data.text,
   });

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const CheckInSchema = mongoose.Schema({
-  user_id: String,
+  user: String,
   place_id: String,
   type: String,
   date: { type: Date, default: Date.now },

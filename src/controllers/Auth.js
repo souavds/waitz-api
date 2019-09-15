@@ -2,6 +2,8 @@
 const jwt = require('jsonwebtoken');
 const Models = require('../models');
 
+const expiresIn = '2m';
+
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
   const user = new Models.User({ username, email, password });
@@ -18,7 +20,9 @@ const signup = async (req, res) => {
           username: 'Username already in use.',
         };
       } else {
-        errors = doc.username === username ? { username: 'Username already in use.' } : { email: 'Email already in use.' };
+        errors = doc.username === username
+          ? { username: 'Username already in use.' }
+          : { email: 'Email already in use.' };
       }
       res.status(401).send({
         errors,
@@ -32,7 +36,7 @@ const signup = async (req, res) => {
         } else {
           const payload = { id: user._id, username: user.username, email: user.email };
           const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: '24h',
+            expiresIn,
           });
           res.status(200).send({
             message: 'User registered successfully!',
@@ -77,7 +81,7 @@ const signin = async (req, res) => {
         } else {
           const payload = { id: user._id, username: user.username, email: user.email };
           const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: '24h',
+            expiresIn,
           });
           res.status(200).send({
             message: 'Signed in successfully!',

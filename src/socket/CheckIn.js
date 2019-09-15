@@ -6,7 +6,7 @@ const Models = require('../models');
 
 const newCheckIn = async (io, socket, data) => {
   const checkIn = new Models.CheckIn({
-    user_id: data.user,
+    user: data.user,
     place_id: data.place,
     type: data.type,
   });
