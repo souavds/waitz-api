@@ -1,9 +1,9 @@
-const Place = require('./PlaceController');
-const Comment = require('./CommentController');
-const User = require('./UserController');
+const Place = require('./Place');
+const Comment = require('./Comment');
+const Auth = require('./Auth');
 
 module.exports = {
   Place,
   Comment,
-  User,
+  Auth,
 };

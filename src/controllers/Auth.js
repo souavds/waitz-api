@@ -6,22 +6,38 @@ const signup = async (req, res) => {
   const { username, email, password } = req.body;
   const user = new Models.User({ username, email, password });
   Models.User.findOne({ $or: [{ username }, { email }] }, (err, doc) => {
-    if (doc) {
-      const msg = doc.username === username ? 'Username already in use.' : 'Email already in use.';
+    if (err) {
       res.status(500).send({
-        message: msg,
+        error: 'Internal error please try again.',
+      });
+    } else if (doc) {
+      let errors = {};
+      if (doc.username === username && doc.email === email) {
+        errors = {
+          email: 'Email already in use.',
+          username: 'Username already in use.',
+        };
+      } else {
+        errors = doc.username === username ? { username: 'Username already in use.' } : { email: 'Email already in use.' };
+      }
+      res.status(401).send({
+        errors,
       });
     } else {
       user.save((error) => {
         if (error) {
           res.status(500).send({
-            message: 'Error trying to signup.',
+            error: 'Error trying to signup.',
           });
         } else {
+          const payload = { id: user._id, username: user.username, email: user.email };
+          const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: '24h',
+          });
           res.status(200).send({
             message: 'User registered successfully!',
+            token,
             user: {
-              // eslint-disable-next-line no-underscore-dangle
               _id: user._id,
               username: user.username,
               email: user.email,
@@ -34,15 +50,17 @@ const signup = async (req, res) => {
 };
 
 const signin = async (req, res) => {
-  const { username, email, password } = req.body;
-  Models.User.findOne({ $or: [{ username }, { email }] }, (err, user) => {
+  const { identifier, password } = req.body;
+  Models.User.findOne({ $or: [{ username: identifier }, { email: identifier }] }, (err, user) => {
     if (err) {
       res.status(500).send({
         error: 'Internal error please try again.',
       });
     } else if (!user) {
       res.status(401).send({
-        error: 'Incorrect username/email or password.',
+        errors: {
+          identifier: "Couldn't find this email or username.",
+        },
       });
     } else {
       user.isCorrectPassword(password, (error, same) => {
@@ -52,17 +70,23 @@ const signin = async (req, res) => {
           });
         } else if (!same) {
           res.status(401).send({
-            error: 'Incorrect username/email or password.',
+            errors: {
+              password: 'Password incorrect.',
+            },
           });
         } else {
-          // Issue token
           const payload = { id: user._id, username: user.username, email: user.email };
           const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: '24h',
           });
           res.status(200).send({
-            success: true,
+            message: 'Signed in successfully!',
             token,
+            user: {
+              _id: user._id,
+              username: user.username,
+              email: user.email,
+            },
           });
         }
       });
