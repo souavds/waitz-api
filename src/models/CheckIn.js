@@ -4,7 +4,8 @@ const CheckInSchema = mongoose.Schema({
   user: String,
   place_id: String,
   type: String,
-  date: { type: Date, default: Date.now },
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now },
   active: { type: Boolean, default: true },
 });
 

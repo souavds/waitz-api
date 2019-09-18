@@ -1,9 +1,9 @@
+const Auth = require('./Auth');
 const Place = require('./Place');
 const Comment = require('./Comment');
-const Auth = require('./Auth');
 
 module.exports = {
+  Auth,
   Place,
   Comment,
-  Auth,
 };
