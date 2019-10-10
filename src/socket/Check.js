@@ -7,43 +7,48 @@ const verifyToken = require('../utils/verifyToken');
 
 const newCheckIn = async (io, socket, data) => {
   if (verifyToken(data.token, data.user)) {
-    const checkIn = new Models.CheckIn({
-      user: data.user,
-      place_id: data.place,
-      type: data.type,
-    });
-    await checkIn.save();
-    const queueType = `queue.${data.type}`;
-    await Models.Place.updateOne(
-      { _id: data.place },
-      { $inc: { [queueType]: 1 } },
-      { upsert: true },
-    );
-    socket.broadcast.emit('newCheckIn', data);
-    const job = new cron.CronJob(
-      date('in 2 minutes'),
-      async () => {
-        Models.CheckIn.findOneAndDelete(
-          { user: data.user, active: true },
-          { active: false, updated_at: Date.now() },
-          async (err, doc) => {
-            if (doc) {
-              // eslint-disable-next-line max-len
-              await Models.Place.updateOne(
-                { _id: data.place },
-                { $inc: { [queueType]: -1 } },
-                { upsert: true },
-              );
-              socket.emit('chekInNotActive');
-              io.emit('checkout', data);
-            }
-            job.stop();
-          },
-        );
-      },
-      null,
-      true,
-    );
+    const hasAlreadyCheckIn = await Models.CheckIn.findOne({ user: data.user, active: true });
+    if (!hasAlreadyCheckIn) {
+      const checkIn = new Models.CheckIn({
+        user: data.user,
+        place_id: data.place,
+        type: data.type,
+      });
+      await checkIn.save();
+      const queueType = `queue.${data.type}`;
+      await Models.Place.updateOne(
+        { _id: data.place },
+        { $inc: { [queueType]: 1 } },
+        { upsert: true },
+      );
+      socket.broadcast.emit('newCheckIn', data);
+      const job = new cron.CronJob(
+        date('in 10 seconds'),
+        async () => {
+          Models.CheckIn.findOneAndUpdate(
+            { user: data.user, active: true },
+            { active: false, updated_at: Date.now() },
+            async (err, doc) => {
+              if (doc) {
+                // eslint-disable-next-line max-len
+                await Models.Place.updateOne(
+                  { _id: data.place },
+                  { $inc: { [queueType]: -1 } },
+                  { upsert: true },
+                );
+                socket.emit('chekInNotActive');
+                io.emit('checkout', data);
+              }
+              job.stop();
+            },
+          );
+        },
+        null,
+        true,
+      );
+    } else {
+      socket.emit('userAlreadyHasCheckIn', data);
+    }
   } else {
     socket.emit('invalidToken');
   }
@@ -63,7 +68,7 @@ const newCheckOut = async (io, socket, data) => {
             { $inc: { [queueType]: -1 } },
             { upsert: true },
           );
-          io.sockets.emit('checkout', { place: doc.place_id, type: doc.type });
+          io.sockets.emit('checkout', { place: doc.place_id, type: doc.type, user: data.user });
         }
       },
     );

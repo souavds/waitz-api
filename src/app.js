@@ -3,7 +3,6 @@ const helmet = require('helmet');
 const cors = require('cors');
 const compression = require('compression');
 const morgan = require('morgan');
-const passport = require('passport');
 
 const app = express();
 
@@ -18,16 +17,8 @@ const corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
-app.use(
-  cors(corsOptions),
-  helmet(),
-  compression(),
-  express.json(),
-  morgan('dev'),
-  passport.initialize(),
-);
+app.use(cors(corsOptions), helmet(), compression(), express.json(), morgan('dev'));
 
-require('./config/passport')(passport);
 require('./routes')(app);
 
 module.exports = { app, http, io };
