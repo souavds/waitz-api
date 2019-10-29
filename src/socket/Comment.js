@@ -14,7 +14,7 @@ const newComment = async (io, socket, data) => {
     await comment.save();
     io.emit('newComment', comment);
     const job = new cron.CronJob(
-      date('in 2 minutes'),
+      date('in 30 seconds'),
       async () => {
         await comment.updateOne({ active: false });
         // eslint-disable-next-line no-underscore-dangle

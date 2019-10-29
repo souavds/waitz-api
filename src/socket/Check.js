@@ -23,7 +23,7 @@ const newCheckIn = async (io, socket, data) => {
       );
       socket.broadcast.emit('newCheckIn', data);
       const job = new cron.CronJob(
-        date('in 10 seconds'),
+        date('in 30 seconds'),
         async () => {
           Models.CheckIn.findOneAndUpdate(
             { user: data.user, active: true },
